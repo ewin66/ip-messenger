@@ -23,7 +23,7 @@ public class refresh_send implements Runnable{
                     DatagramSocket socket = new DatagramSocket();
                     InetAddress group = InetAddress.getByName("234.0.0.1");
                     InetAddress local = null;
-
+                    
                       for (final Enumeration< NetworkInterface > interfaces = NetworkInterface.getNetworkInterfaces( );interfaces.hasMoreElements( );)
                       {
                                 final NetworkInterface cur = interfaces.nextElement( );
@@ -60,11 +60,13 @@ public class refresh_send implements Runnable{
                                    {
                                        send += j + " ";
                                    }
+
                                    if(chkbit==1)
                                        send +="new a";
                                    else if(chkbit==0)
                                        send +="old";
                                    buf = send.getBytes();
+//                                   System.out.print(buf+"llllllllllllllllllllllllllllllllllllllllllll");
 //                                   System.out.println("Pankaj1  -->>  "+ Thread.currentThread().getId());
                                    System.out.println(host + "  --->>   aa");
                                    DatagramPacket packet = new DatagramPacket(buf, buf.length, group, 4446);
@@ -83,10 +85,13 @@ public class refresh_send implements Runnable{
 //                                       socket.send(packet);
 //                                   }
                                    System.out.println(host + "  --->>   aa");
+                                   
                                    socket.close();
                                }
                                catch(Exception notfound)
-                               {    System.out.println(host + "  --->>   not connected");
+                               {    System.out.println(host + "  --->>   not connected   --->>"+ notfound.getMessage());
+                               		for(StackTraceElement ste :notfound.getStackTrace())
+                               			System.out.println(ste);
                                }
                                 index++;
                             }
