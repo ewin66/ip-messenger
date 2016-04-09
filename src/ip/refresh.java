@@ -1,12 +1,12 @@
 package ip;
 
-import java.net.Inet4Address;
+import java.io.IOException;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
 import java.net.InetAddress;
-import java.net.InterfaceAddress;
-import java.net.NetworkInterface;
-import java.net.Socket;
-import java.util.ArrayList;
-import java.util.Enumeration;
+import java.net.MulticastSocket;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.SwingUtilities;
 
 public class refresh implements Runnable{
@@ -18,65 +18,72 @@ public class refresh implements Runnable{
             }
             
             public void run ()
-            {   
-                ArrayList<String> total_add = new ArrayList<String>();
-                ArrayList<String> total_name = new ArrayList<String>();
+            {   new Thread(new refresh_send(1)).start();
                 try
-                {
-                      for (final Enumeration< NetworkInterface > interfaces = NetworkInterface.getNetworkInterfaces( );interfaces.hasMoreElements( );)
-                      {
-                                final NetworkInterface cur = interfaces.nextElement( );
-                                
-                                //if ( cur.isLoopback( ) )
-                                    //continue;
+                {   byte[] buf = new byte[256];
+                    final MulticastSocket socket_recv = new MulticastSocket(4446);
+                    InetAddress group = InetAddress.getByName("234.0.0.1");
+                    
+                    try
+                    {
+                        socket_recv.joinGroup(group);
+                    }
+                    catch(Exception exp)
+                    {
+//                        InetAddress addr = InetAddress.getLocalHost();
+//                        System.out.println(addr.getHostAddress()+"aaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+//                        String[] aa = new String[]{addr.getHostAddress()+"",InetAddress.getLocalHost().getHostName(),System.getProperty("user.name")};
+//                        if(!model.search(aa))
+//                            model.setValueAt(aa);
+//                        DatagramSocket soc = new DatagramSocket(4445);
+//                        byte[] buffer = new byte[1024];
+//                        DatagramPacket packet1 = new DatagramPacket(buffer, buffer.length );
+//                        System.out.println("chkpoint ............");
+//                          soc.receive(packet1);
+//                          System.out.println("chkpoint ............");
+//                          String data = new String(packet1.getData());
+//                          System.out.println("hahahahahaha"+data+"hahahahahahahahahahhahahah");
 
-                                for ( final InterfaceAddress addr : cur.getInterfaceAddresses( ) )
-                                {
-                                    final InetAddress inet_addr = addr.getAddress( );
+                    }
+                    System.out.println("pankaj\n");
+                    while(true)
+                    {   buf = new byte[256];
+                        DatagramPacket packet = new DatagramPacket(buf, buf.length);
+                        System.out.println("aaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+                        socket_recv.receive(packet);
+                        System.out.println("aaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+                        if(Thread.currentThread().isInterrupted())
+                            throw new InterruptedException("Stopped by ifInterruptedStop()");
+                        String received = new String(packet.getData());
+                        final String[] aa = received.split(" ");
+                        System.out.println("sssssssssssssss   "+aa[3]+"   ppppppppppppppppppppp");
+                        if(aa[3].equalsIgnoreCase("new")==true)
+                        {   System.out.println("Sending old");
+                            new Thread(new refresh_send(0)).start();
+                        }
+//                        System.out.println("Pankaj1  -->>  "+ Thread.currentThread().getId());
+                        if(!model.search(aa))
+                            model.setValueAt(aa);
+                        System.out.println("Pankaj1");
+//                        SwingUtilities.invokeLater(new Runnable() {
+//                                        @Override
+//                                        public void run() {
+//                                            if(!model.search(aa))
+//                                                model.setValueAt(aa);
+//                                            System.out.println("Pankaj1");
+//                                            //System.out.println(model.getValueAt(0, 0));
+//                                        }
+//                                    });
+                        System.out.println("received: " + received);
+//                        Thread.currentThread().sleep(5000);
 
-                                    if ( !( inet_addr instanceof Inet4Address ) )
-                                        continue;
-                                    total_add.add(""+inet_addr.getHostAddress( ));
-                                    total_name.add(""+inet_addr.getHostName());
-                             }
-			}
-                       System.out.println(total_add.size());
-                       int index=0;
-                        for(String i: total_add)
-                        {       host = i;
-                                if(total_add.size()>1 && i.equalsIgnoreCase("127.0.0.1"))
-                                    continue;
-                                System.out.println(""+host);
-                               try
-                               {
-                                   Socket chk = new Socket(host, 6789);
-                                   System.out.println(host + "  --->>    connected");
-                                   final String[] aa = new String[]{host,total_name.get(index)+"",System.getProperty("user.name")};
-                                    SwingUtilities.invokeLater(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            System.out.println("Pankaj1");
-                                            model.setValueAt(aa);
-                                            System.out.println("Pankaj1");
-                                            //System.out.println(model.getValueAt(0, 0));
-                                        }
-                                    });
-                                    try{System.in.read();}
-                                    catch(Exception q){}
-                                    chk.close();
-                               }
-                               catch(Exception notfound)
-                               {    System.out.println(host + "  --->>   not connected");
-//                                    try{System.in.read();}
-//                                    catch(Exception q){}
-                               }
-                                index++;
-                            }
+                    }
                 }
                 catch(Exception e1)
                 {
-                        System.out.println(String.valueOf(e1) + "\n");
+                        System.out.println(String.valueOf(e1) + "pankaj\n");
+//                        socket_recv.leaveGroup(group);
+                        return;
                 }
-                //return users;
             }
 }

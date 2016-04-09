@@ -5,14 +5,16 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.table.AbstractTableModel;
+//import sun.net.ftp.FtpClient;
 
 public class Main implements ActionListener,MouseListener
 {
         ServerRequestCheck src = new ServerRequestCheck();
         Thread src1= new Thread(src);
         MyTableModel model = new MyTableModel();
-        refresh re = new refresh(model);
+        refresh re = new refresh(model);            // refresh for receiving.
         Thread re1= new Thread(re);
+        
         browse br = new browse ();
         File file;
         JFrame f;
@@ -40,7 +42,7 @@ public class Main implements ActionListener,MouseListener
             {   total = t.getSelectedRows();
                 totallength=0;
                 rowvalue=null;
-                
+                System.out.println("Sending data to  ==>>  "+rowvalue);
                 while(totallength<total.length)
                 {   
                     rowvalue = t.getValueAt(total[totallength], 0) + "";
@@ -49,6 +51,7 @@ public class Main implements ActionListener,MouseListener
                     System.out.println("Sending data to  ==>>  "+rowvalue);
                     totallength++;
                 }
+                System.out.println("Sending data to  ==>>  "+rowvalue);
             }
             if(e.getSource()==b1)
             {   refresh_func();
@@ -127,11 +130,12 @@ public class Main implements ActionListener,MouseListener
         public void refresh_func()
         {
             if(re1.isAlive())
-            {   
+            {   model.delete();
                 re1.interrupt();
-                model = new MyTableModel();
-                t = new JTable(model);
-                re = new refresh(model);
+                System.out.println("Killed.");
+//                model = new MyTableModel();
+//                t = new JTable(model);
+//                re = new refresh(model);
                 re1 = new Thread(re);
             }
             re1.start();
@@ -172,8 +176,8 @@ public class Main implements ActionListener,MouseListener
 
 class MyTableModel  extends AbstractTableModel{
         private String[] columnNames = {"Ip Address",
-                                        "Group",
-                                        "Name"};
+                                        "Host",
+                                        "User"};
         private ArrayList<String[]> data = new ArrayList<String[]>();
         
 
@@ -216,4 +220,31 @@ class MyTableModel  extends AbstractTableModel{
         return data.get(rowIndex)[columnIndex];
     }
 
+    public boolean search(String[] chk)
+    {
+        Object chk1 = chk[0];
+        System.out.println("The element being checked is : "+chk1);
+        boolean ret = false;
+        System.out.println("The data size is :   "+data.size());
+        for(int i=0;i<data.size();i++)
+        {
+            if(chk[0].equalsIgnoreCase(data.get(i)[0]))
+            {
+                ret = true;
+                break;
+            }
+        }
+        return ret;
     }
+    public void delete()
+    {
+        data.clear();
+        fireTableStructureChanged();
+//        try {
+//                            System.in.read();
+//                        } catch (IOException ex) {
+//                            Logger.getLogger(refresh.class.getName()).log(Level.SEVERE, null, ex);
+//                        }
+        System.out.println("The current situation is : "+data.isEmpty());
+    }
+}
