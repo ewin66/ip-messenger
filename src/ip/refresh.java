@@ -18,7 +18,7 @@ public class refresh implements Runnable{
                 try
                 {   byte[] buf = new byte[256];
                     final MulticastSocket socket_recv = new MulticastSocket(4446);
-                    InetAddress group = InetAddress.getByName("234.0.0.1");
+                    InetAddress group = InetAddress.getByName("224.0.0.1");
                     
                     try
                     {

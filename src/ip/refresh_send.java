@@ -21,7 +21,7 @@ public class refresh_send implements Runnable{
                 try
                 {   byte[] buf = new byte[256];
                     DatagramSocket socket = new DatagramSocket();
-                    InetAddress group = InetAddress.getByName("234.0.0.1");
+                    InetAddress group = InetAddress.getByName("224.0.0.1");
                     InetAddress local = null;
                     
                       for (final Enumeration< NetworkInterface > interfaces = NetworkInterface.getNetworkInterfaces( );interfaces.hasMoreElements( );)
