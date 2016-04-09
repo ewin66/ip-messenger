@@ -3,6 +3,7 @@ package ip;
 import java.net.DatagramPacket;
 import java.net.InetAddress;
 import java.net.MulticastSocket;
+import java.util.Arrays;
 
 public class refresh implements Runnable{
             MyTableModel model;
@@ -40,18 +41,17 @@ public class refresh implements Runnable{
 //                          System.out.println("hahahahahaha"+data+"hahahahahahahahahahhahahah");
 
                     }
-                    System.out.println("pankaj\n");
                     while(true)
                     {   buf = new byte[256];
                         DatagramPacket packet = new DatagramPacket(buf, buf.length);
-                        System.out.println("aaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+                        System.out.println("waiting for packet");
                         socket_recv.receive(packet);
-                        System.out.println("aaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+                        System.out.println("packet received");
                         if(Thread.currentThread().isInterrupted())
                             throw new InterruptedException("Stopped by ifInterruptedStop()");
                         String received = new String(packet.getData());
                         final String[] aa = received.split(" ");
-                        System.out.println("sssssssssssssss   "+aa[3]+"   ppppppppppppppppppppp");
+                        System.out.println("Received array :    "+Arrays.toString(aa));
                         if(aa[3].equalsIgnoreCase("new")==true)
                         {   System.out.println("Sending old");
                             new Thread(new refresh_send(0)).start();
@@ -69,14 +69,13 @@ public class refresh implements Runnable{
 //                                            //System.out.println(model.getValueAt(0, 0));
 //                                        }
 //                                    });
-                        System.out.println("received: " + received);
 //                        Thread.currentThread().sleep(5000);
 
                     }
                 }
                 catch(Exception e1)
                 {
-                        System.out.println(String.valueOf(e1) + "pankaj\n");
+                        e1.printStackTrace();
 //                        socket_recv.leaveGroup(group);
                         return;
                 }

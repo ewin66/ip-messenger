@@ -40,11 +40,11 @@ public class refresh_send implements Runnable{
                                     total_add.add(""+inet_addr.getHostAddress( ));
                              }
 			}
-                       System.out.println(total_add.size());
+                       System.out.println(total_add.size() + " -> " + total_add);
                        int index=0;
                         for(String i: total_add)
                         {       host = i;
-                                if(total_add.size()>1 && i.equalsIgnoreCase("127.0.0.1"))
+                                if(total_add.size()>1 && i.startsWith("127.")) //ignore all ip like 127.0.0.1
                                     continue;
                                 if(total_add.size()==1)
 //                                    local = InetAddress.getByName(host);
@@ -53,7 +53,6 @@ public class refresh_send implements Runnable{
                                try
                                {
 //                                   Socket chk = new Socket(host, 6789);
-                                   System.out.println(host + "  --->>    connected");
                                    String[] aa = new String[]{host,InetAddress.getLocalHost().getHostName(),System.getProperty("user.name")};
                                    String send = new String("");
                                    for(String j : aa)
@@ -68,9 +67,9 @@ public class refresh_send implements Runnable{
                                    buf = send.getBytes();
 //                                   System.out.print(buf+"llllllllllllllllllllllllllllllllllllllllllll");
 //                                   System.out.println("Pankaj1  -->>  "+ Thread.currentThread().getId());
-                                   System.out.println(host + "  --->>   aa");
+                                   System.out.println(host + "  --->>   making datagram packet : " + send);
                                    DatagramPacket packet = new DatagramPacket(buf, buf.length, group, 4446);
-                                   System.out.println(host + "  --->>   aa");
+                                   System.out.println(host + "  --->>   sending pacet");
 //                                   try
 //                                   {
                                        socket.send(packet);
@@ -84,21 +83,20 @@ public class refresh_send implements Runnable{
 //                                       System.out.println("chkpoint ............send");
 //                                       socket.send(packet);
 //                                   }
-                                   System.out.println(host + "  --->>   aa");
+                                   System.out.println(host + "  --->>   sent packet");
                                    
                                    socket.close();
                                }
                                catch(Exception notfound)
                                {    System.out.println(host + "  --->>   not connected   --->>"+ notfound.getMessage());
-                               		for(StackTraceElement ste :notfound.getStackTrace())
-                               			System.out.println(ste);
+                               		notfound.printStackTrace();
                                }
                                 index++;
                             }
                 }
                 catch(Exception e1)
                 {
-                        System.out.println(String.valueOf(e1) + "\n");
+                        e1.printStackTrace();
                 }
     }
 
