@@ -52,6 +52,10 @@ public class refresh implements Runnable{
                         String received = new String(packet.getData());
                         final String[] aa = received.split(" ");
                         System.out.println("Received array :    "+Arrays.toString(aa));
+                        /*
+                         * long time. forgot about the code. 
+                         * I guess, this is only to receive the same packet 1 more time and check if there are duplicate entries in the table
+                         */
                         if(aa[3].equalsIgnoreCase("new")==true)
                         {   System.out.println("Sending old");
                             new Thread(new refresh_send(0)).start();

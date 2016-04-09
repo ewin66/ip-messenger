@@ -16,7 +16,6 @@ public class refresh_send implements Runnable{
         this.chkbit = chkbit;
     }
     public void run() {
-                String host = "";
                 ArrayList<String> total_add = new ArrayList<String>();
                 try
                 {   byte[] buf = new byte[256];
@@ -42,10 +41,17 @@ public class refresh_send implements Runnable{
 			}
                        System.out.println(total_add.size() + " -> " + total_add);
                        int index=0;
-                        for(String i: total_add)
-                        {       host = i;
-                                if(total_add.size()>1 && i.startsWith("127.")) //ignore all ip like 127.0.0.1
+                        for(String host : total_add)
+                        {
+                                if(total_add.size()>1 && host.startsWith("127.")) //ignore all ip like 127.0.0.1
                                     continue;
+                                
+                                /*
+                                 * The code is working for 1 person who is running the code.
+                                 * I guess, it won't work because in the following line i'm sending packet to myself. not to the group
+                                 * Check it out
+                                 */
+                                
                                 if(total_add.size()==1)
 //                                    local = InetAddress.getByName(host);
                                     group = InetAddress.getByName(host);
