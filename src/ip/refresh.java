@@ -53,8 +53,10 @@ public class refresh implements Runnable{
                         final String[] aa = received.split(" ");
                         System.out.println("Received array :    "+Arrays.toString(aa));
                         /*
-                         * long time. forgot about the code. 
-                         * I guess, this is only to receive the same packet 1 more time and check if there are duplicate entries in the table
+                         * The following new & old means the following : 
+                         * 1. Whenever a new member comes, we'll receive the info about him.
+                         * 2. After that, all the old members push their info to the new user.
+                         * 3. Hence, first new comes, then old(already connected users who receive info about the new one) goes to new user.
                          */
                         if(aa[3].equalsIgnoreCase("new")==true)
                         {   System.out.println("Sending old");
