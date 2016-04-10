@@ -1,0 +1,5 @@
+http://cs.joensuu.fi/~ppant/oop%20Project/
+http://www.twock.com/cubehub/
+http://commons.apache.org/proper/commons-io/apidocs/org/apache/commons/io/IOUtils.html
+
+video -> https://en.wikipedia.org/wiki/Java_Media_Framework
